@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import "./index.css";
 const pizzaData = [
   {
     name: "Focaccia",
@@ -47,21 +48,99 @@ const pizzaData = [
 
 function App() {
   return (
-    <div>
-      <h2>Pizza Menu</h2>
-      <Pizza />
-      <Pizza />
-      <Pizza />
+    <div className="container">
+      <Header />
+      <Menu />
+      <Footer />
     </div>
   );
 }
-
-function Pizza() {
+function Header() {
+  // const style = { color: "red", fontSize: "48px", textTransform: "uppercase" };
   return (
-    <div>
-      <img src="pizzas/spinaci.jpg" alt="Pizzas spinaci" />
-      <h2>Pizza Prosciutto</h2>
-      <p>Tomato, mozarella, ham, aragula, and burrata cheese</p>
+    <header className="header">
+      <h1>Fast React Pizza Co.</h1>;
+    </header>
+  );
+}
+// const pizzas = [];
+function Menu() {
+  const pizzas = pizzaData;
+  // const pizzas = [];
+
+  const numPizzas = pizzas.length;
+  return (
+    <main className="menu">
+      <h2>Our Menu</h2>;
+      {numPizzas > 0 ? (
+        <>
+          <p>
+            is simply dummy text of the printing and typesetting industry. Lorem
+            Ipsum has been the industry's standard dummy text ever since the
+            1500s, when an unknown printer took a
+          </p>
+          <ul className="pizzas">
+            {pizzas.map((pizza) => (
+              <Pizza pizzaObj={pizza} key={pizza.name} />
+            ))}
+          </ul>
+        </>
+      ) : (
+        <p>W're still working on our menu. Please come back later.</p>
+      )}
+    </main>
+  );
+}
+
+function Pizza({ pizzaObj }) {
+  // if (pizzaObj.soldOut) return null;
+  return (
+    <li className={`pizza ${pizzaObj.soldOut ? "sold-out" : ""}`}>
+      <img src={pizzaObj.photoName} alt={pizzaObj.name} />
+      <div>
+        <h3>{pizzaObj.name}</h3>
+        <p>{pizzaObj.ingredients}</p>
+        {/* {pizzaObj.soldOut ? (
+          <span>SOLD OUT</span>
+        ) : (
+          <span>{pizzaObj.price}</span>
+        )} */}
+        <span>{pizzaObj.soldOut ? "SOLD OUT" : pizzaObj.price}</span>
+      </div>
+    </li>
+  );
+}
+function Footer() {
+  const hour = new Date().getHours();
+  const openHour = 12;
+  const closeHour = 22;
+  const isOpen = hour >= openHour && hour <= closeHour;
+  console.log(isOpen);
+  // if (hour >= openHour && hour <= closeHour) alert("We're currently open");
+  // else alert("Sorry we are closed");
+
+  return (
+    <footer className="footer">
+      {isOpen ? (
+        <Order closeHour={closeHour} openHour={openHour} />
+      ) : (
+        <p>
+          We're happy to welcome you between {openHour} and {closeHour}
+        </p>
+      )}
+    </footer>
+  );
+  // return React.createElement("footer", null, "We're currently open");
+}
+
+function Order({ closeHour, openHour }) {
+  return (
+    <div className="order">
+      <p>
+        We're open from {openHour}:00 to {closeHour}:00. Come visit us or order
+        online
+      </p>
+      <button className="btn">Order</button>
     </div>
   );
 }
